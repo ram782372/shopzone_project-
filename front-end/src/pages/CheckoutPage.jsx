@@ -36,7 +36,7 @@ const CheckoutPage = () => {
         thumbnail: item.thumbnail,
       }))
 
-      await fetch('http://localhost:5000/api/orders', {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -74,6 +74,9 @@ const CheckoutPage = () => {
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold text-gray-800 mb-6">Checkout</h1>
+      {user && (
+        <p className="text-gray-600 mb-4">Checkout as <span className="font-semibold">{user.name || user.name}</span></p>
+      )}
 
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded-lg mb-4">

@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { SearchProvider } from './context/Searchcontext'
 import { AuthProvider } from './context/Authcontext'
 import Navbar from './components/Navbar'
+import Footer from './components/Footer'
 import HomePage from './pages/HomePage'
 import CartPage from './pages/CartPage'
 import LoginPage from './pages/LoginPage'
@@ -24,6 +25,7 @@ const App = () => {
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/profile" element={<ProfilePage />} />
             </Routes>
+            <Footer />
           </div>
         </SearchProvider>
       </AuthProvider>

@@ -15,7 +15,7 @@ function RegisterPage() {
     setError('')
     setLoading(true)
     try {
-      await axios.post('http://localhost:5000/api/auth/register', form)
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, form)
       navigate('/login', { state: { registered: true } })
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed. Please try again.')

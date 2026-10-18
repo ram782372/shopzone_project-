@@ -1,0 +1,63 @@
+﻿≡ƒÜÇ Server is running on http://localhost:3010
+Loading and parsing data.json...
+Processing 30 products into documents...
+Chunking documents...
+Produced 30 chunks from 30 products.
+Initializing in-memory vector store with HuggingFace Embeddings...
+node : dtype not specified for "model". Using the default dtype (fp32) for this 
+device (cpu).
+At line:1 char:213
++ ... em .server.log -Force }; $env:PORT='3010'; node index.js 2>&1 | Out-F ...
++                                                ~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (dtype not speci...s device (cpu).:String 
+   ) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+RAG system initialized successfully (LLM enabled).
+Γ£à Chatbot ready for queries.
+Error generating response: GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: 
+Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5
+-flash:generateContent: [404 Not Found] This model models/gemini-2.5-flash is no 
+longer available to new users. Please update your code to use models/gemini-3.8-flash 
+for the latest features and improvements. We recommend you to use the Interactions 
+API (https://ai.google.dev/gemini-api/docs/get-started).
+    at handleResponseNotOk (file:///C:/Users/ram78/OneDrive/Attachments/Desktop/projec
+t/Rag-implement/node_modules/@google/generative-ai/dist/index.mjs:432:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async makeRequest (file:///C:/Users/ram78/OneDrive/Attachments/Desktop/project/
+Rag-implement/node_modules/@google/generative-ai/dist/index.mjs:401:9)
+    at async generateContent (file:///C:/Users/ram78/OneDrive/Attachments/Desktop/proj
+ect/Rag-implement/node_modules/@google/generative-ai/dist/index.mjs:865:22)
+    at async file:///C:/Users/ram78/OneDrive/Attachments/Desktop/project/Rag-implement
+/node_modules/@langchain/google-genai/dist/chat_models.js:602:12
+    at async pRetry (file:///C:/Users/ram78/OneDrive/Attachments/Desktop/project/Rag-i
+mplement/node_modules/@langchain/core/dist/utils/p-retry/index.js:123:19)
+    at async run (C:\Users\ram78\OneDrive\Attachments\Desktop\project\Rag-implement\no
+de_modules\p-queue\dist\index.js:163:29) {
+  status: 404,
+  statusText: 'Not Found',
+  errorDetails: undefined
+}
+Error generating response: GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: 
+Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5
+-flash:generateContent: [404 Not Found] This model models/gemini-2.5-flash is no 
+longer available to new users. Please update your code to use models/gemini-3.8-flash 
+for the latest features and improvements. We recommend you to use the Interactions 
+API (https://ai.google.dev/gemini-api/docs/get-started).
+    at handleResponseNotOk (file:///C:/Users/ram78/OneDrive/Attachments/Desktop/projec
+t/Rag-implement/node_modules/@google/generative-ai/dist/index.mjs:432:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async makeRequest (file:///C:/Users/ram78/OneDrive/Attachments/Desktop/project/
+Rag-implement/node_modules/@google/generative-ai/dist/index.mjs:401:9)
+    at async generateContent (file:///C:/Users/ram78/OneDrive/Attachments/Desktop/proj
+ect/Rag-implement/node_modules/@google/generative-ai/dist/index.mjs:865:22)
+    at async file:///C:/Users/ram78/OneDrive/Attachments/Desktop/project/Rag-implement
+/node_modules/@langchain/google-genai/dist/chat_models.js:602:12
+    at async pRetry (file:///C:/Users/ram78/OneDrive/Attachments/Desktop/project/Rag-i
+mplement/node_modules/@langchain/core/dist/utils/p-retry/index.js:123:19)
+    at async run (C:\Users\ram78\OneDrive\Attachments\Desktop\project\Rag-implement\no
+de_modules\p-queue\dist\index.js:163:29) {
+  status: 404,
+  statusText: 'Not Found',
+  errorDetails: undefined
+}

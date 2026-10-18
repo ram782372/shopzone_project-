@@ -18,7 +18,7 @@ function LoginPage() {
     setError('')
     setLoading(true)
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', form, {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, form, {
         withCredentials: true,
       })
       dispatch(setCredentials({ user: res.data.user, token: res.data.token }))

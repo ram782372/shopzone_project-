@@ -3,7 +3,20 @@ const chatForm = document.getElementById("chat-form");
 const userInput = document.getElementById("user-input");
 const sendBtn = document.getElementById("send-btn");
 
-function appendMessage(sender, text, isBot = false) {
+// Persistent per-browser session id so the backend can keep conversation memory.
+let sessionId = "default";
+try {
+  sessionId = localStorage.getItem("rag-session-id");
+  if (!sessionId) {
+    sessionId =
+      (crypto && crypto.randomUUID) ? crypto.randomUUID() : "default";
+    localStorage.setItem("rag-session-id", sessionId);
+  }
+} catch (e) {
+  sessionId = "default";
+}
+
+function appendMessage(sender, text, isBot = false, sources = null) {
   const messageDiv = document.createElement("div");
   messageDiv.className = `message ${isBot ? "bot-message" : "user-message"}`;
 
@@ -13,13 +26,53 @@ function appendMessage(sender, text, isBot = false) {
     minute: "2-digit",
   });
 
-  messageDiv.innerHTML = `
-        <div class="avatar">${isBot ? "🤖" : "👤"}</div>
-        <div class="message-content">
-            <p>${text}</p>
-            <span class="time">${timeStr}</span>
-        </div>
-    `;
+  // Build the message content via DOM to avoid injecting unescaped source text.
+  const contentDiv = document.createElement("div");
+  contentDiv.className = "message-content";
+
+  const p = document.createElement("p");
+  p.innerHTML = text; // bot text uses simple markup from the server fallback; keep existing behavior
+  contentDiv.appendChild(p);
+
+  // Render a compact sources list under the bot message when provided.
+  if (sources && Array.isArray(sources) && sources.length) {
+    const srcWrap = document.createElement("div");
+    srcWrap.className = "sources";
+    const label = document.createElement("span");
+    label.className = "sources-label";
+    label.textContent = "Sources:";
+    srcWrap.appendChild(label);
+
+    const ul = document.createElement("ul");
+    sources.forEach((s) => {
+      const li = document.createElement("li");
+      const title = document.createElement("span");
+      title.className = "source-title";
+      title.textContent = s.title || `Product #${s.id}`;
+      li.appendChild(title);
+      if (s.price != null) {
+        const price = document.createElement("span");
+        price.className = "source-price";
+        price.textContent = ` — $${s.price}`;
+        li.appendChild(price);
+      }
+      ul.appendChild(li);
+    });
+    srcWrap.appendChild(ul);
+    contentDiv.appendChild(srcWrap);
+  }
+
+  const time = document.createElement("span");
+  time.className = "time";
+  time.textContent = timeStr;
+  contentDiv.appendChild(time);
+
+  const avatar = document.createElement("div");
+  avatar.className = "avatar";
+  avatar.textContent = isBot ? "🤖" : "👤";
+
+  messageDiv.appendChild(avatar);
+  messageDiv.appendChild(contentDiv);
 
   chatWindow.appendChild(messageDiv);
   chatWindow.scrollTop = chatWindow.scrollHeight;
@@ -65,11 +118,11 @@ chatForm.addEventListener("submit", async (e) => {
   showTypingIndicator();
 
   try {
-    const response = await axios.post("/api/chat", { message });
+    const response = await axios.post("/api/chat", { message, sessionId });
     removeTypingIndicator();
 
     if (response.data.answer) {
-      appendMessage("Bot", response.data.answer, true);
+      appendMessage("Bot", response.data.answer, true, response.data.sources);
     } else if (response.data.error) {
       appendMessage("Bot", `Error: ${response.data.error}`, true);
     }

@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
-import dotenv from "dotenv";
-
-dotenv.config();
+// Env vars are loaded once via `import "dotenv/config"` in app.js, which runs before this module is imported.
 
 const connectDB = async () => {
   try {
