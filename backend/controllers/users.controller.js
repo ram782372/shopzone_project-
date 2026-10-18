@@ -15,12 +15,17 @@ export const getAllUsers = asyncHandler(async (_req, res) => {
 export const updateUser = asyncHandler(async (req, res) => {
   const { username, password } = req.body;
 
+  // ownership guard: a logged-in user may only update their own profile
+  if (String(req.user?.id) !== String(req.params.id)) {
+    throw new ApiError(403, "You can only update your own profile");
+  }
+
   const user = await User.findById(req.params.id);
   if (!user) throw new ApiError(404, "User not found");
 
-  // handle profile picture upload
+  // handle profile picture upload (file is buffered in memory by multer memoryStorage)
   if (req.file) {
-    const cloudinaryResult = await uploadOnCloudinary(req.file.path);
+    const cloudinaryResult = await uploadOnCloudinary(req.file.buffer);
     if (!cloudinaryResult) {
       throw new ApiError(500, "Image upload to Cloudinary failed. Check your CLOUD_NAME, CLOUD_API, and CLOUDINARY_API_SECRET in .env");
     }

@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useAuth } from '../context/Authcontext'
 import { setUser } from '../store/authSlice'
 import { useNavigate } from 'react-router-dom'
@@ -13,6 +13,7 @@ const ProfilePage = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const fileInputRef = useRef(null)
+  const token = useSelector((state) => state.auth.token)
 
   const [isEditing, setIsEditing] = useState(false)
   const [previewUrl, setPreviewUrl] = useState(null)
@@ -93,6 +94,11 @@ const ProfilePage = () => {
       return
     }
 
+    if (!token) {
+      setError('Not authenticated. Please log in again.')
+      return
+    }
+
     setLoading(true)
     try {
       const formData = new FormData()
@@ -102,9 +108,12 @@ const ProfilePage = () => {
       if (selectedFile) formData.append('profilePicture', selectedFile) // ✅ selectedFile, not profilePicture
 
       const res = await axios.put(
-        `http://localhost:5000/api/auth/update/${user.id}`,
+        `${import.meta.env.VITE_API_URL}/api/auth/update/${user.id}`,
         formData,
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          headers: { Authorization: `Bearer ${token}` },
+        }
       )
 
       dispatch(setUser(res.data.user))

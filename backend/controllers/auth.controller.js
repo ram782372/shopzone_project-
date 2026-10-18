@@ -13,12 +13,13 @@ import {
   getAllUsersLimiter,
 } from "../config/rate.limiter.config.js";
 import upload from "../config/multer.config.js";
+import verifyToken from "../middlewares/verifytoken.middleware.js";
 
 const authController = express.Router();
 
 authController.post("/register", registerController);
 authController.post("/login", loginController);
-authController.put("/update/:id", updateLimiter, upload.single('profilePicture'), usersController.updateUser);
+authController.put("/update/:id", updateLimiter, verifyToken, upload.single('profilePicture'), usersController.updateUser);
 authController.delete("/delete/:id", usersController.deleteUser);
 authController.get("/users", getAllUsersLimiter, usersController.getAllUsers);
 // authController.get("/orders", orderController.getAllOrders);
